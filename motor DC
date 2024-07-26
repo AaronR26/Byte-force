@@ -1,0 +1,50 @@
+#include <Servo.h>
+
+// Definición de pines del puente H L298N
+const int motorPin1 = 2;  // Conectado al pin IN1 del L298N
+const int motorPin2 = 3;  // Conectado al pin IN2 del L298N
+const int enablePin = 9;  // Conectado al pin ENA del L298N (habilita el motor)
+
+// Definición del pin del servomotor
+const int servoPin = 10;  // Conectado al pin de control del servomotor MG996R
+
+Servo myServo;  // Crear objeto servo
+int servoPos = 90;  // Posición inicial del servomotor (neutral)
+
+void setup() {
+  // Configurar los pines como salida
+  pinMode(motorPin1, OUTPUT);
+  pinMode(motorPin2, OUTPUT);
+  pinMode(enablePin, OUTPUT);
+
+  // Configurar y mover el servomotor a la posición inicial
+  myServo.attach(servoPin);
+  myServo.write(servoPos);
+
+  // Iniciar el motor DC en una dirección
+  digitalWrite(motorPin1, HIGH);
+  digitalWrite(motorPin2, LOW);
+  analogWrite(enablePin, 200);  // Control de velocidad (valor entre 0-255)
+}
+
+void loop() {
+  // Variable para almacenar el tiempo actual
+  unsigned long currentMillis = millis();
+
+  // Hacer que el servomotor gire a la izquierda cada 10 segundos
+  if (currentMillis % 20000 < 10000) {
+    myServo.write(180);  // Girar a la izquierda (180 grados)
+  } 
+  // Hacer que el servomotor gire a la derecha cada otros 10 segundos
+  else {
+    myServo.write(180);  // Girar a la derecha (180 grados)
+  }
+
+  // Hacer que el motor DC gire hacia adelante continuamente
+  digitalWrite(motorPin1, HIGH);
+  digitalWrite(motorPin2, LOW);
+  analogWrite(enablePin, 200);  // Control de velocidad (valor entre 0-255)
+  
+  // Pequeña demora para evitar cambios demasiado rápidos
+  delay(100);
+}
